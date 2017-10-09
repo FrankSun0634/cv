@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <CesiumMenu></CesiumMenu>  
+     
     <LonandLat></LonandLat>
     <ImageProviderControl></ImageProviderControl>
     <ImageProviderPanel></ImageProviderPanel>

@@ -27,6 +27,8 @@ let viewer = new Cesium.Viewer("cesiumContainer",{
   	scene3DOnly: false,
   	homeButton: false
 });
+
+// viewer.scene.globe.imageryLayers.add(esri, 0)
 // let terrainProvider = new Cesium.CesiumTerrainProvider({
 // 		url : "http://assets.agi.com/stk-terrain/world"
 // 	})

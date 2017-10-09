@@ -1,5 +1,17 @@
 <template >
-	<div class="imageProviderPanel" :style="styles">{{item}}</div>
+	<div class="imageProviderPanel" :style="styles">
+		<el-radio-group v-model="radio2" @change="checkChange">
+		    <el-radio :label="3" class='el-radio-class'>
+		    	Bing Maps Aerial
+			</el-radio>
+		    <el-radio :label="6" class='el-radio-class'>
+		    	ESRI World Street Map
+		    </el-radio>
+		    <el-radio :label="9" class='el-radio-class'>
+		    	Open Street Map
+		    </el-radio>
+		</el-radio-group>
+	</div>
 </template>
 
 <script>
@@ -9,8 +21,11 @@
 			return {
 				item: 0, 
 				isShow:false,
+				radio2: 3,
 				styles:{
-					left: '-100px'
+					// left: '-100px'
+					left: '10px',
+					color: 'white'
 				}
 			}
 		},
@@ -55,12 +70,68 @@
 				left = parseInt(left)
 				left -= 20
 				self.styles.left = left+"px"
-				if(left < -100){
+				if(left < -300){
 					cancelAnimationFrame(id)
 					id=-1
-					self.styles.left = "-100px"
+					self.styles.left = "-300px"
 				}else{
 					requestAnimationFrame(hidden)
+				}
+			}
+		},
+		methods: {
+			checkChange(value){
+				let viewer = this.viewer
+
+				switch(value){
+					case 3:
+						changeProvider3(3);
+						break;
+					case 6:
+						changeProvider6(6);
+						break;
+					case 9:
+						changeProvider9(9);
+						break;
+				}
+
+				
+
+                function changeProvider3(){
+                	let bingMap = new Cesium.BingMapsImageryProvider({
+	                    url : 'https://dev.virtualearth.net',
+	                    mapStyle : Cesium.BingMapsStyle.AERIAL
+	                });
+	                let layer = viewer.imageryLayers.get(0)
+	                if(layer == null){
+	                	alert("BingMap is null");
+	                }
+					viewer.imageryLayers.remove(layer);
+					// viewer.imageryLayers.lowerToBottom(layer)
+					let len = viewer.imageryLayers.length
+					viewer.imageryLayers.addImageryProvider(bingMap);
+                }
+
+				function changeProvider6(){
+					let esri = new Cesium.ArcGisMapServerImageryProvider({
+					    url : 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
+					});
+					let layer = viewer.imageryLayers.get(0)
+					viewer.imageryLayers.remove(layer);
+					// viewer.imageryLayers.lowerToBottom(layer)
+					let len = viewer.imageryLayers.length
+					viewer.imageryLayers.addImageryProvider(esri);
+				}
+
+				function changeProvider9(){
+					let osm = new Cesium.createOpenStreetMapImageryProvider({
+			            url : 'https://a.tile.openstreetmap.org/'
+			        })
+					let layer = viewer.imageryLayers.get(0)
+					viewer.imageryLayers.remove(layer);
+					// viewer.imageryLayers.lowerToBottom(layer)
+					let len = viewer.imageryLayers.length
+					viewer.imageryLayers.addImageryProvider(osm);
 				}
 			}
 		}
@@ -69,11 +140,18 @@
 <style>
 	.imageProviderPanel{
 		position: absolute;
-		width: 100px;
+		width: 300px;
 		height: 100px;
 		top: 100px;
-		background-color: white;
+		background-color: gray;
 		color: black;
-		z-index: 999
+		z-index: 999;
+		border-radius: 5px;
+	}
+	.el-radio-class{
+		color:white;
+		margin-left:15px;
+		margin-top:10px;
+		display:block;
 	}
 </style>

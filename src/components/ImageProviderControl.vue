@@ -10,7 +10,7 @@
 	import draw from "../assets/js/draw"
 	// Vue.use(draw)
 	
-	let _show = true
+	let _show = false
 	let self = this
 	export default{
 		mounted(){

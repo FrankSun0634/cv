@@ -27,8 +27,8 @@
 	        		let cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian)
 	        		let lon = ((cartographic.longitude * 180) / Cesium.Math.PI).toFixed(3)
 	        		let lat = ((cartographic.latitude * 180) / Cesium.Math.PI).toFixed(3)
-	        		let height = (viewer.scene.globe.getHeight(cartographic)).toFixed(3);
-	        		return "Lon: " + lon + "; Lat: " + lat + "; Height: " + height
+	        		let alt = (viewer.scene.globe.getHeight(cartographic)).toFixed(3)
+	        		return "Lon: " + lon + "; Lat: " + lat + "; Altitude: " + alt
 	        	}
 	        }
 
