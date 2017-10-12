@@ -31,7 +31,7 @@
 	        		// let alt = (viewer.scene.globe.getHeight(cartographic)).toFixed(3)
 	        		getAltitude(lon, lat)
 	        		
-	        		return "Lon: " + lon.toFixed(3) + "; Lat: " + lat.toFixed(3) + "; Altitude: " + alt.toFixed(3) + "test github"
+	        		return "Lon: " + lon.toFixed(3) + "; Lat: " + lat.toFixed(3) + "; Altitude: " + alt.toFixed(3)
 	        	}
 	        }
 
