@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "element-ui": "^1.4.6",
+    "iview": "^2.4.0",
     "vue": "^2.4.2",
     "vue-router": "^2.7.0"
   },

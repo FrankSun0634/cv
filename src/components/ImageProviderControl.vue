@@ -1,18 +1,21 @@
 <template>
-	<div id="imageProviderControl">
-		<i class="el-icon-d-arrow-right" v-on:click="displayPanel"></i>
+	<div id="imageProviderControl" v-on:click="displayPanel">
+		<i><Icon v-bind:type="icontype"></Icon></i>
 	</div>
 </template>
 
 <script>
-	// import Vue from 'vue'
 	import eventBus from "../assets/EventBus"
 	import draw from "../assets/js/draw"
-	// Vue.use(draw)
 	
 	let _show = false
 	let self = this
 	export default{
+		data() {
+			return {
+				icontype: "chevron-right"
+			}
+		},
 		mounted(){
 			draw.init(this.viewer)
 		},
@@ -21,7 +24,11 @@
 			displayPanel(){
 				_show = !_show
 				// draw.show()
-				draw.line({"p1":{"lon":-75, "lat":35}, "p2":{"lon":-125, "lat":35}})
+				// draw.line({"p1":{"lon":-75, "lat":35}, "p2":{"lon":-125, "lat":35}})
+				if(_show)
+					this.icontype = "chevron-left"
+				else
+					this.icontype = "chevron-right"
 				eventBus.$emit("displayPanel", {msg:"display", isShow:_show})
 			}
 		}
@@ -43,12 +50,12 @@
 
 	#imageProviderControl i{
 		font-size:30px;
-		margin-top: 5px;
-		margin-left: 5px;
+		margin-left: 6px;
 	}
 
-	#imageProviderControl i:hover{
+	#imageProviderControl:hover{
 		color:red;
+		cursor: pointer;
 	}
 
 </style>

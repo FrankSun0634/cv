@@ -1,16 +1,17 @@
 <template >
 	<div class="imageProviderPanel" :style="styles">
-		<el-radio-group v-model="radio2" @change="checkChange">
-		    <el-radio :label="3" class='el-radio-class'>
-		    	Bing Maps Aerial
-			</el-radio>
-		    <el-radio :label="6" class='el-radio-class'>
-		    	ESRI World Street Map
-		    </el-radio>
-		    <el-radio :label="9" class='el-radio-class'>
-		    	Open Street Map
-		    </el-radio>
-		</el-radio-group>
+		<RadioGroup v-model="vertical" vertical @on-change="checkChange">
+	        <Radio label="3" class="el-radio-class">
+	            <span>Bing Maps Aerial</span>
+	        </Radio>
+	        <Radio label="6" class="el-radio-class">
+	            <span>ESRI World Street Map</span>
+	        </Radio>
+	        <Radio label="9" class="el-radio-class">
+	            <span>Open Street Map</span>
+	        </Radio>
+	    </RadioGroup>
+	
 	</div>
 </template>
 
@@ -21,17 +22,17 @@
 			return {
 				item: 0, 
 				isShow:false,
-				radio2: 3,
+				vertical: 3,
 				styles:{
 					// left: '-100px'
-					left: '10px',
+					left: '-300px',
 					color: 'white'
 				}
 			}
 		},
 		mounted(){
 			let self = this
-			let id=-1
+			// let id=-1
 			eventBus.$on("displayPanel", function(obj){
 				self.item = obj.msg
 				// self.isShow = obj.isShow
@@ -39,43 +40,24 @@
 			})
 
 			function showPanel(_isShow){
-				if(id!=-1){
-					cancelAnimationFrame(id)
-				}
 				if(_isShow){
-					id = requestAnimationFrame(animator)
+					setTimeout(animator, 20, {"left": 20, "marginLeft": 5})
 				}else{
-					id = requestAnimationFrame(hidden)
+					setTimeout(animator, 20, {"left": -20, "marginLeft": -300})
 				}
 			}
 
-			function animator(){
+			function animator(option){
+				let marginLeft = option.marginLeft
 				let leftStr = self.styles.left
 				let left = leftStr.substring(0, leftStr.length-2);
 				left = parseInt(left)
-				left += 20
+				left += option.left
 				self.styles.left = left+"px"
-				if(left > 5){
-					cancelAnimationFrame(id)
-					id=-1
-					self.styles.left = "5px"
+				if((marginLeft>0 && left>marginLeft) || (marginLeft<0 && left<marginLeft)){
+					self.styles.left = marginLeft+"px"
 				}else{
-					requestAnimationFrame(animator)
-				}
-			}
-
-			function hidden(){
-				let leftStr = self.styles.left
-				let left = leftStr.substring(0, leftStr.length-2);
-				left = parseInt(left)
-				left -= 20
-				self.styles.left = left+"px"
-				if(left < -300){
-					cancelAnimationFrame(id)
-					id=-1
-					self.styles.left = "-300px"
-				}else{
-					requestAnimationFrame(hidden)
+					setTimeout(animator, 20, option)
 				}
 			}
 		},
@@ -84,54 +66,48 @@
 				let viewer = this.viewer
 
 				switch(value){
-					case 3:
-						changeProvider3(3);
+					case "3":
+						BingMapProvider();
 						break;
-					case 6:
-						changeProvider6(6);
+					case "6":
+						ArcGisProvider();
 						break;
-					case 9:
-						changeProvider9(9);
+					case "9":
+						OSMProvider();
 						break;
 				}
-
 				
 
-                function changeProvider3(){
+                function BingMapProvider(){
                 	let bingMap = new Cesium.BingMapsImageryProvider({
 	                    url : 'https://dev.virtualearth.net',
 	                    mapStyle : Cesium.BingMapsStyle.AERIAL
 	                });
-	                let layer = viewer.imageryLayers.get(0)
-	                if(layer == null){
-	                	alert("BingMap is null");
-	                }
-					viewer.imageryLayers.remove(layer);
-					// viewer.imageryLayers.lowerToBottom(layer)
-					let len = viewer.imageryLayers.length
-					viewer.imageryLayers.addImageryProvider(bingMap);
+	                changeProvider(bingMap)
                 }
 
-				function changeProvider6(){
+				function ArcGisProvider(){
 					let esri = new Cesium.ArcGisMapServerImageryProvider({
 					    url : 'https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
 					});
-					let layer = viewer.imageryLayers.get(0)
-					viewer.imageryLayers.remove(layer);
-					// viewer.imageryLayers.lowerToBottom(layer)
-					let len = viewer.imageryLayers.length
-					viewer.imageryLayers.addImageryProvider(esri);
+					changeProvider(esri)
 				}
 
-				function changeProvider9(){
+				function OSMProvider(){
 					let osm = new Cesium.createOpenStreetMapImageryProvider({
 			            url : 'https://a.tile.openstreetmap.org/'
 			        })
+					changeProvider(osm)
+				}
+
+				function changeProvider(map){
 					let layer = viewer.imageryLayers.get(0)
+	                if(layer == null){
+	                	alert("Map is null");
+	                }
 					viewer.imageryLayers.remove(layer);
-					// viewer.imageryLayers.lowerToBottom(layer)
 					let len = viewer.imageryLayers.length
-					viewer.imageryLayers.addImageryProvider(osm);
+					viewer.imageryLayers.addImageryProvider(map);
 				}
 			}
 		}
@@ -151,7 +127,5 @@
 	.el-radio-class{
 		color:white;
 		margin-left:15px;
-		margin-top:10px;
-		display:block;
 	}
 </style>

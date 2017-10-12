@@ -1,17 +1,18 @@
 <template>
-	<el-tag class="el-tag-cesium">{{num}}</el-tag>
+	<Tag  class="el-tag-cesium">{{num}}</Tag>
 </template>
 
 <script>
 	export default{
 		data(){
 			return {
-				num: 0
+				num: ""
 			}
 		},
 		beforeMount(){
 			let self = this
 			let viewer = self.viewer
+			let alt = 0.0
 	        setInterval(writeLonLat,20)
 	        function writeLonLat() {
 	            self.num = computeLonLat();
@@ -25,11 +26,24 @@
 	        	let cartesian = self.viewer.scene.globe.pick(viewer.camera.getPickRay(pick), viewer.scene)
 	        	if(cartesian !== undefined){
 	        		let cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian)
-	        		let lon = ((cartographic.longitude * 180) / Cesium.Math.PI).toFixed(3)
-	        		let lat = ((cartographic.latitude * 180) / Cesium.Math.PI).toFixed(3)
-	        		let alt = (viewer.scene.globe.getHeight(cartographic)).toFixed(3)
-	        		return "Lon: " + lon + "; Lat: " + lat + "; Altitude: " + alt
+	        		let lon = ((cartographic.longitude * 180) / Cesium.Math.PI)
+	        		let lat = ((cartographic.latitude * 180) / Cesium.Math.PI)
+	        		// let alt = (viewer.scene.globe.getHeight(cartographic)).toFixed(3)
+	        		getAltitude(lon, lat)
+	        		
+	        		return "Lon: " + lon.toFixed(3) + "; Lat: " + lat.toFixed(3) + "; Altitude: " + alt.toFixed(3)
 	        	}
+	        }
+
+	        function getAltitude(lon,lat){
+	        	let positions = [
+				    Cesium.Cartographic.fromDegrees(lon, lat)
+				];
+				let currentLevel = viewer.scene.globe._surface._debug.maxDepth
+	        	Cesium.sampleTerrain(viewer.terrainProvider, currentLevel, positions)
+				.then(function(samples) {
+				    alt = samples[0].height
+				});
 	        }
 
 	        writeLonLat();
@@ -45,5 +59,7 @@
     left:10px;
     bottom:5px;
     background: transparent;
+    border: 0px;
+    color:white;
 }
 </style>
