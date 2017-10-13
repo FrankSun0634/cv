@@ -1,13 +1,13 @@
 <template >
 	<div class="imageProviderPanel" :style="styles">
 		<RadioGroup v-model="vertical" vertical @on-change="checkChange">
-	        <Radio label="3" class="el-radio-class">
+	        <Radio label="Bing" class="el-radio-class">
 	            <span>Bing Maps Aerial</span>
 	        </Radio>
-	        <Radio label="6" class="el-radio-class">
+	        <Radio label="ESRI" class="el-radio-class">
 	            <span>ESRI World Street Map</span>
 	        </Radio>
-	        <Radio label="9" class="el-radio-class">
+	        <Radio label="OSM" class="el-radio-class">
 	            <span>Open Street Map</span>
 	        </Radio>
 	    </RadioGroup>
@@ -22,7 +22,7 @@
 			return {
 				item: 0, 
 				isShow:false,
-				vertical: 3,
+				vertical: "Bing",
 				styles:{
 					// left: '-100px'
 					left: '-300px',
@@ -66,13 +66,13 @@
 				let viewer = this.viewer
 
 				switch(value){
-					case "3":
+					case "Bing":
 						BingMapProvider();
 						break;
-					case "6":
+					case "ESRI":
 						ArcGisProvider();
 						break;
-					case "9":
+					case "OSM":
 						OSMProvider();
 						break;
 				}

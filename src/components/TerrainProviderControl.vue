@@ -20,8 +20,6 @@
 <style>
 	.terrainProviderControl{
 		position: absolute;
-		width: 100px;
-		height: 100px;
 		margin-top: 50px;
 		margin-left: 5px;
 		z-index: 999;
