@@ -1,12 +1,15 @@
 <template>
-	<div class="terrainProviderPanel" v-show="isShow">
-		<div style="text-align:center">
-			<img src="../assets/logo.png">
+	<div class="terrainProviderPanel" v-show="showChange">
+		<div style="height:30px;">
+			<Icon id="closeBtn" @click.native="closeLoadPanel" type="close" size="20px" style="float:right;margin-top:10px;margin-right:10px;" />
 		</div>
-		<div style="text-align:center">AGI STK Terrain</div>
-		<div style="text-align:center;margin-top:20px;">
+		<div style="text-align:center; margin-top:10px; clear:both;">
+			<img src="../assets/Terrain.jpg">
+		</div>
+		<div style="text-align:center; margin-top:20px;">AGI STK Terrain</div>
+		<div style="text-align:center; margin-top:20px;">
 			<Button type="primary" @click="loadSTKTerrain">加载</Button>
-			<Button type="error" @click="unLoadSTKTerrain">取消</Button>
+			<Button type="error" @click="unLoadSTKTerrain">删除</Button>
 		</div>
 	</div>
 </template>
@@ -16,14 +19,14 @@
 	export default{
 		data() {
 			return {
-				isShow: false
+				showChange: false
 			}
 		},
 		mounted(){
 			let self = this
 			
 			eventBus.$on("displayTerrainPanel", function(obj){
-				self.isShow = obj.isShow
+				self.showChange = !self.showChange
 			})
 		},
 		methods: {
@@ -37,7 +40,12 @@
 			},
 
 			unLoadSTKTerrain: function(){
-				alert("unLoad");
+				let viewer = this.viewer
+				viewer.terrainProvider = new Cesium.EllipsoidTerrainProvider();
+			},
+
+			closeLoadPanel: function(){
+				this.showChange = false
 			}
 		}
 	}
@@ -58,6 +66,10 @@
 		border-radius: 10px;
 		color: white;
 		z-index: 999 
+	}
+	#closeBtn:hover{
+		color: red;
+		cursor: pointer;
 	}
 
 </style>

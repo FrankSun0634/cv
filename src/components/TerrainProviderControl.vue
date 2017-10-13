@@ -6,12 +6,10 @@
 
 <script>
 	import eventBus from "../assets/EventBus"
-	let showTerrainPanel = false
 	export default{
 		methods: {
 			btnClick(){
-				showTerrainPanel = !showTerrainPanel
-				eventBus.$emit("displayTerrainPanel", {isShow:showTerrainPanel})
+				eventBus.$emit("displayTerrainPanel", {showChange: true})
 			}
 		}
 	}
@@ -24,5 +22,4 @@
 		margin-left: 5px;
 		z-index: 999;
 	}
-
 </style>
