@@ -5,17 +5,19 @@ import iView from 'iview';
 import 'iview/dist/styles/iview.css';   
 import App from './App'
 import router from './router'
+// import myrouter from './myrouter'
 
 Vue.config.productionTip = false
 
 Vue.use(iView);
 
+// myrouter.out();
 let Cesium = window.Cesium;
-let viewer = new Cesium.Viewer("cesiumContainer",{
-	// imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
+let viewer = new Cesium.Viewer("cesiumContainer", {
+ // imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
  //        url : 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
  //    }),
-	baseLayerPicker: false,
+	  baseLayerPicker: false,
   	animation: false,
   	navigationHelpButton: false,
   	timeline: false,

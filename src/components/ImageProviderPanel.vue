@@ -4,6 +4,9 @@
 	        <Radio label="Bing" class="el-radio-class">
 	            <span>Bing Maps Aerial</span>
 	        </Radio>
+	        <Radio label="Google" class="el-radio-class">
+	            <span>Google Maps 3D</span>
+	        </Radio>
 	        <Radio label="ESRI" class="el-radio-class">
 	            <span>ESRI World Street Map</span>
 	        </Radio>
@@ -64,10 +67,14 @@
 		methods: {
 			checkChange(value){
 				let viewer = this.viewer
+				let baseUrl = 'http://www.360weapon.com/'
 
 				switch(value){
 					case "Bing":
 						BingMapProvider();
+						break;
+					case "Google":
+						GoogleMapProvider();
 						break;
 					case "ESRI":
 						ArcGisProvider();
@@ -100,6 +107,20 @@
 					changeProvider(osm)
 				}
 
+				function GoogleMapProvider(){
+					let googlemap = new Cesium.UrlTemplateImageryProvider({
+						                    url: baseUrl + 'wmts/geearth/{z}/{x}/{y}.jpg',
+						                    // pickFeaturesUrl: baseUrl + 'wmts/geearth/feature/{z}/{x}/{y}/{j}/{i}.json',
+						                    // getFeatureInfoFormats: [new Cesium.GetFeatureInfoFormat('json', 'application/json', function (data) {
+						                    //     return Cesium.when(data)
+						                    // })],
+						                    tilingScheme: new Cesium.GeographicTilingScheme(),
+						                    maximumLevel: 19,
+						                    credit: 'Google Earth'
+						                })
+					changeProvider(googlemap)
+				}
+
 				function changeProvider(map){
 					let layer = viewer.imageryLayers.get(0)
 	                if(layer == null){
@@ -117,7 +138,7 @@
 	.imageProviderPanel{
 		position: absolute;
 		width: 300px;
-		height: 100px;
+		height: 130px;
 		top: 100px;
 		background-color: gray;
 		color: black;
