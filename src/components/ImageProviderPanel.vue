@@ -130,6 +130,8 @@
 					let len = viewer.imageryLayers.length
 					viewer.imageryLayers.addImageryProvider(map);
 				}
+
+				
 			}
 		}
 	}
